@@ -1,11 +1,6 @@
 pipeline{
 	agent any
 	stages{
-		stage("Pull Latest Image"){
-			steps{
-				sh "docker pull 3220/selenium-docker"
-			}
-		}
 		stage("Start Grid"){
 			steps{
 				sh "docker-compose up -d hub chrome firefox"
@@ -16,12 +11,8 @@ pipeline{
 				sh "docker-compose up search-module book-flight-module"
 			}
 		}
-	}
-	post{
-		always{
-			archiveArtifacts artifacts: 'output/**'
-			sh "docker-compose down"
-			sh "sudo rm -rf output/"
+		stage("Stop Grid"){
+				sh "docker-compose down"
 		}
 	}
 }
